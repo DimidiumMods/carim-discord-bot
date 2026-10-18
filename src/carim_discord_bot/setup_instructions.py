@@ -34,7 +34,7 @@ def print_setup_instructions_bot():
 
 def print_setup_instructions_config():
     print_header('Update configuration')
-    config_template_path = files("carim_discord_bot").joinpath("data", "config.json")
+    config_template_path = files("carim_discord_bot").joinpath("data", "config.example.json")
     config_descriptions_path = files("carim_discord_bot").joinpath("data", "config_descriptions.json")
     print('The template configuration file is located at:')
     print(config_template_path)

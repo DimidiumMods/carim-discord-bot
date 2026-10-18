@@ -5,8 +5,6 @@ import os
 import pathlib
 import sys
 
-from importlib.resources import files
-
 import carim_discord_bot
 from carim_discord_bot import setup_instructions, config
 from carim_discord_bot.cftools import omega_service, cf_cloud_service
@@ -49,17 +47,29 @@ def parse_parameters():
 
 
 def setup_configuration(config_argument):
-    # We need to initialize logging so errors are reported when trying to load the configuration
-    # After configuration is loaded, logging will be re-initialized with the appropriate level
+    # Initialise logging before loading the configuration.
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 
-    if config_argument is None:
-        config_argument = files("carim_discord_bot").joinpath("data", 'config.json')
-        if os.name == 'posix':
-            p = pathlib.Path('/etc/carim/config.json')
-            if p.is_file():
-                config_argument = p
-    config.initialize(config_argument)
+    if config_argument is not None:
+        config_path = pathlib.Path(config_argument).expanduser()
+    else:
+        # Prefer the Linux system configuration when available.
+        system_config = pathlib.Path('/etc/carim/config.json')
+        project_config = pathlib.Path(__file__).resolve().parents[2] / 'config.json'
+
+        if os.name == 'posix' and system_config.is_file():
+            config_path = system_config
+        else:
+            config_path = project_config
+
+    if not config_path.is_file():
+        raise FileNotFoundError(
+            f"Carim configuration not found: {config_path}\n"
+            "Copy config.example.json to config.json and configure it, "
+            "or specify a configuration using -c."
+        )
+
+    config.initialize(config_path)
 
 
 def set_log_verbosity(verbosity):
