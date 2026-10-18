@@ -5,7 +5,7 @@ import os
 import pathlib
 import sys
 
-from pkg_resources import resource_filename
+from importlib.resources import files
 
 import carim_discord_bot
 from carim_discord_bot import setup_instructions, config
@@ -54,7 +54,7 @@ def setup_configuration(config_argument):
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 
     if config_argument is None:
-        config_argument = resource_filename(__name__, 'data/config.json')
+        config_argument = files("carim_discord_bot").joinpath("data", 'config.json')
         if os.name == 'posix':
             p = pathlib.Path('/etc/carim/config.json')
             if p.is_file():

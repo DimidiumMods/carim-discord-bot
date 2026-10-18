@@ -1,7 +1,7 @@
 import json
 import os
 
-from pkg_resources import resource_filename
+from importlib.resources import files
 
 
 def print_setup_instructions(setup_part=None):
@@ -34,8 +34,8 @@ def print_setup_instructions_bot():
 
 def print_setup_instructions_config():
     print_header('Update configuration')
-    config_template_path = resource_filename(__name__, 'data/config.json')
-    config_descriptions_path = resource_filename(__name__, 'data/config_descriptions.json')
+    config_template_path = files("carim_discord_bot").joinpath("data", "config.json")
+    config_descriptions_path = files("carim_discord_bot").joinpath("data", "config_descriptions.json")
     print('The template configuration file is located at:')
     print(config_template_path)
     print()
@@ -89,7 +89,7 @@ def print_setup_instructions_service():
     elif os.name == 'posix':
         print('Setting up a systemd service in Linux')
         print()
-        service_template_path = resource_filename(__name__, 'data/carim.service')
+        service_template_path = files("carim_discord_bot").joinpath("data", "carim.service")
         print(f'Service file: {service_template_path}')
         print('STEPS')
         steps = (
