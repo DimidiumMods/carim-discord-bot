@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     install_requires=[
-        'discord.py>=1.6.0',
+        'discord.py>=2.7.1',
         'requests'
     ],
     extras_require={
