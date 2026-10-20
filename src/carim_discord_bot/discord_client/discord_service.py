@@ -126,7 +126,11 @@ class DiscordService(managed_service.ManagedService):
         await super().stop()
 
     async def service(self):
-        self.client = client.CarimClient()
+        intents = discord.Intents.default()
+        intents.message_content = True
+        intents.members = True
+
+        self.client = client.CarimClient(intents=intents)
         await self.client.login(config.get().token)
         asyncio.create_task(self.client.connect())
         await self.set_presence()
